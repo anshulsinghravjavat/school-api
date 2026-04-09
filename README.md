@@ -23,13 +23,13 @@ A Node.js API for managing school data using Express.js and PostgreSQL.
    ```
 
 3. **Database Setup:**
-   - Install PostgreSQL and pgAdmin
-   - Create a new database (e.g., `school_db`)
-   - Run the SQL script in `database.sql` to create the schools table
+   - Install MongoDB and MongoDB Compass
+   - Start MongoDB service
+   - The database will be created automatically when you run the app
 
 4. **Environment Variables:**
    - Copy `.env.example` to `.env`
-   - Update the database credentials in `.env`
+   - Update the MongoDB URI in `.env` (default: mongodb://localhost:27017/school_db)
 
 5. **Run the server:**
    ```bash
@@ -161,7 +161,7 @@ Deploy to Heroku, Vercel, or any Node.js hosting service. Update the database co
 
 - Node.js
 - Express.js
-- PostgreSQL
-- pg (PostgreSQL client)
+- MongoDB
+- Mongoose
 - CORS
 - dotenv

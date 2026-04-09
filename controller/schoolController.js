@@ -1,4 +1,4 @@
-const pool = require('../config/db');
+const School = require('../models/School');
 const { validateSchool } = require('../utils/validation');
 const calculateDistance = require('../utils/distance');
 
@@ -11,11 +11,15 @@ exports.addSchool = async (req, res) => {
 
         const { name, address, latitude, longitude } = req.body;
 
-        const query = 'INSERT INTO schools (name, address, latitude, longitude) VALUES ($1, $2, $3, $4) RETURNING *';
-        const values = [name, address, latitude, longitude];
+        const school = new School({
+            name,
+            address,
+            latitude,
+            longitude
+        });
 
-        const result = await pool.query(query, values);
-        res.status(201).json({ message: 'School added successfully', school: result.rows[0] });
+        const savedSchool = await school.save();
+        res.status(201).json({ message: 'School added successfully', school: savedSchool });
     } catch (error) {
         console.error('Error adding school:', error);
         res.status(500).json({ error: 'Internal server error' });
@@ -37,13 +41,12 @@ exports.listSchools = async (req, res) => {
         const userLat = parseFloat(lat);
         const userLng = parseFloat(lng);
 
-        const query = 'SELECT * FROM schools';
-        const result = await pool.query(query);
+        const schools = await School.find({});
 
         // Calculate distance for each school and sort
-        const schoolsWithDistance = result.rows.map(school => {
+        const schoolsWithDistance = schools.map(school => {
             const distance = calculateDistance(userLat, userLng, school.latitude, school.longitude);
-            return { ...school, distance };
+            return { ...school.toObject(), distance };
         });
 
         schoolsWithDistance.sort((a, b) => a.distance - b.distance);

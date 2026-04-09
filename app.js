@@ -1,9 +1,13 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const connectDB = require("./config/db");
 require("dotenv").config();
 
 const schoolRoutes = require("./routes/schoolRoutes");
+
+// Connect to MongoDB
+connectDB();
 
 const app = express();
 const port = process.env.PORT || 3000;
